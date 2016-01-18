@@ -11,9 +11,27 @@ window.onload = function() {
   var ballY = 50;
   var ballSpeedX = 5;
   var ballSpeedY = 5;
+  const PADDLE_HEIGHT = 100;
   setInterval(function(){
     moveBall()
   }, fps);
+
+
+  // Track user's mouse position
+  var calculateMousePos = function(event) {
+    var mouseX = event.clientX - canvas.offsetLeft;
+    var mouseY = event.clientY - canvas.offsetTop;
+    return {
+      x: mouseX,
+      y: mouseY
+    }
+  }
+
+  canvas.addEventListener('mousemove', function(event) {
+    var mousePos = calculateMousePos(event);
+    paddle1Y = mousePos.y - PADDLE_HEIGHT/2;
+    
+  }); 
 
   //move the ball
   function moveBall() {
@@ -40,7 +58,7 @@ window.onload = function() {
 
     // Left Paddle
     canvasContext.fillStyle = "white";
-    canvasContext.fillRect(0, 210, 10, 90);
+    canvasContext.fillRect(0, paddle1Y, 10, PADDLE_HEIGHT);
 
     // Draw the ball
     canvasContext.fillStyle = "white";
