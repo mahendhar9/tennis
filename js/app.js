@@ -11,6 +11,7 @@ window.onload = function() {
   var ballY = 50;
   var ballSpeedX = 5;
   var ballSpeedY = 5;
+  var paddle1Y = 250;
   const PADDLE_HEIGHT = 100;
   setInterval(function(){
     moveBall()
@@ -31,18 +32,29 @@ window.onload = function() {
     var mousePos = calculateMousePos(event);
     paddle1Y = mousePos.y - PADDLE_HEIGHT/2;
     
-  }); 
+  });
+
+  //Reset the ball from the net when it hits the wall
+  function ballReset() {
+    ballX = canvas.width/2;
+    ballY = canvas.height/2;
+  }
 
   //move the ball
   function moveBall() {
     ballX = ballX + ballSpeedX;
     ballY = ballY + ballSpeedY;
 
-    // Bounce back horizontally if it hits the wall
+    // Bounce back the ball if it hits the paddle, else reset
     if(ballX > canvas.width) {
+      ballReset()
       ballSpeedX = -ballSpeedX;
     } else if(ballX < 0) {
-      ballSpeedX = -ballSpeedX;
+      if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
+        ballSpeedX = -ballSpeedX;
+      } else {
+        ballReset()
+      }
     }
 
     // Bounce back vertically if it hits the wall
