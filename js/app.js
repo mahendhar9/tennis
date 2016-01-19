@@ -12,6 +12,7 @@ window.onload = function() {
   var ballSpeedX = 5;
   var ballSpeedY = 5;
   var paddle1Y = 250;
+  var paddle2Y = 250;
   const PADDLE_HEIGHT = 100;
   setInterval(function(){
     moveBall()
@@ -36,6 +37,7 @@ window.onload = function() {
 
   //Reset the ball from the net when it hits the wall
   function ballReset() {
+    ballSpeedX = -ballSpeedX;
     ballX = canvas.width/2;
     ballY = canvas.height/2;
   }
@@ -47,8 +49,11 @@ window.onload = function() {
 
     // Bounce back the ball if it hits the paddle, else reset
     if(ballX > canvas.width) {
-      ballReset()
-      ballSpeedX = -ballSpeedX;
+      if (ballY > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT) {
+        ballSpeedX = -ballSpeedX;
+      } else {
+        ballReset()
+      }
     } else if(ballX < 0) {
       if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
         ballSpeedX = -ballSpeedX;
@@ -71,6 +76,10 @@ window.onload = function() {
     // Left Paddle
     canvasContext.fillStyle = "white";
     canvasContext.fillRect(0, paddle1Y, 10, PADDLE_HEIGHT);
+
+    // Right Paddle
+    canvasContext.fillStyle = "white";
+    canvasContext.fillRect(canvas.width-10, paddle2Y, 10, PADDLE_HEIGHT);
 
     // Draw the ball
     canvasContext.fillStyle = "white";
