@@ -35,6 +35,16 @@ window.onload = function() {
     
   });
 
+  //Computer AI - Second Paddle's movement
+  function computerMovement() {
+    var paddle2YCenter = paddle2Y + (PADDLE_HEIGHT/2)
+    if(paddle2YCenter < ballY - 35 ) {
+      paddle2Y = paddle2Y + 10
+    } else if(paddle2YCenter > ballY + 35) {
+      paddle2Y = paddle2Y - 10
+    }
+  }
+
   //Reset the ball from the net when it hits the wall
   function ballReset() {
     ballSpeedX = -ballSpeedX;
@@ -44,6 +54,7 @@ window.onload = function() {
 
   //move the ball
   function moveBall() {
+    computerMovement()
     ballX = ballX + ballSpeedX;
     ballY = ballY + ballSpeedY;
 
