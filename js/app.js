@@ -9,11 +9,15 @@ window.onload = function() {
   var fps = 1000/30; //30 frames per second
   var ballX = 50;
   var ballY = 50;
-  var ballSpeedX = 5;
-  var ballSpeedY = 5;
+  var ballSpeedX = 10;
+  var ballSpeedY = 4;
   var paddle1Y = 250;
   var paddle2Y = 250;
+  var player1Score = 0;
+  var player2Score = 0;
+  var gameOver = false;
   const PADDLE_HEIGHT = 100;
+  const WINNING_SCORE = 3;
   setInterval(function(){
     moveBall()
   }, fps);
@@ -47,6 +51,9 @@ window.onload = function() {
 
   //Reset the ball from the net when it hits the wall
   function ballReset() {
+    if (player1Score >= WINNING_SCORE || player2Score >= WINNING_SCORE) {
+      gameOver = true;
+    }
     ballSpeedX = -ballSpeedX;
     ballX = canvas.width/2;
     ballY = canvas.height/2;
@@ -54,7 +61,15 @@ window.onload = function() {
 
   //move the ball
   function moveBall() {
-    computerMovement()
+    if (gameOver == true) {
+      canvasContext.fillStyle = "black";
+      canvasContext.fillRect(0,0, canvas.width, canvas.height);
+      canvasContext.fillStyle = "white";
+      canvasContext.font="30px Arial";
+      canvasContext.fillText("Game Over", canvas.width/2-50, canvas.height/2);
+      return;
+    }
+    computerMovement();
     ballX = ballX + ballSpeedX;
     ballY = ballY + ballSpeedY;
 
@@ -63,13 +78,15 @@ window.onload = function() {
       if (ballY > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT) {
         ballSpeedX = -ballSpeedX;
       } else {
-        ballReset()
+        ballReset();
+        player1Score++;
       }
     } else if(ballX < 0) {
       if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
         ballSpeedX = -ballSpeedX;
       } else {
-        ballReset()
+        ballReset();
+        player2Score++;
       }
     }
 
@@ -97,6 +114,11 @@ window.onload = function() {
     canvasContext.beginPath();
     canvasContext.arc(ballX, ballY, 10, 0, 2*Math.PI, true);
     canvasContext.fill();
+
+    //Update the Score
+    canvasContext.font="30px Arial";
+    canvasContext.fillText(player1Score, 100, 100);
+    canvasContext.fillText(player2Score, canvas.width-100, 100);
   }
 
 }
